@@ -4,7 +4,6 @@ export class MyScene extends Phaser.Scene {
     ices: Phaser.GameObjects.Group;
     now: number;
     originImg: Phaser.GameObjects.Image;
-    // land: Phaser.GameObjects.TileSprite;
     posTF: Phaser.GameObjects.Text;
     bg: Phaser.GameObjects.Image;
     constructor() {
