@@ -1,3 +1,8 @@
+import { ButtonCreator } from "../core/Button";
+import { CallbackInfo } from "../core/CallBackInfo";
+import { LayoutType } from "../core/Layout";
+import { MainUIContainer } from "../core/MainUIContainer";
+
 export class MyScene extends Phaser.Scene {
     isTweening = false;
     iceContainer: Phaser.GameObjects.Container;
@@ -6,6 +11,7 @@ export class MyScene extends Phaser.Scene {
     originImg: Phaser.GameObjects.Image;
     posTF: Phaser.GameObjects.Text;
     bg: Phaser.GameObjects.Image;
+    con: MainUIContainer;
     constructor() {
         super({
             key: "my-scene",
@@ -13,6 +19,7 @@ export class MyScene extends Phaser.Scene {
     }
 
     preload() {
+
         this.load.image("myImg", "assets/spookysky.png");
         this.load.image("gem1", "assets/gem1.png");
         this.load.image("gem2", "assets/gem2.png");
@@ -30,13 +37,21 @@ export class MyScene extends Phaser.Scene {
     }
 
     create() {
+        let con = this.con = new MainUIContainer({ width: 1280, height: 640 }, this);
         const { add, lights, input, scale: { width, height }, tweens, time, cameras } = this;
         this.bg = add.image(400, 300, "myImg").setPipeline("Light2D");
+        let btn = ButtonCreator(this, 400, 300, "invader2", 0, 1, CallbackInfo.get(() => {
+            console.log(`按钮点击`);
+            this.scene.start('MainMenu');
+        }));
+        btn.scale = 2;
         this.originImg = add.image(0, 0, "block-ice");
+        // this.originImg.Text
         const invader2 = add.group([
             { key: 'invader2', frame: 0, repeat: 10, setXY: { x: 32, y: 148, stepX: 52 }, setRotation: { value: 0, step: 0.1 } },
             { key: 'invader2', frame: 0, repeat: 10, setXY: { x: 32, y: 148 + 48, stepX: 52 }, setRotation: { value: 0, step: -0.1 } }
         ] as Phaser.Types.GameObjects.Group.GroupCreateConfig[]);
+        con.add(this.bg, LayoutType.TOP_RIGHT)
         Phaser.Actions.IncX(invader2.getChildren(), 100);
         Phaser.Actions.SetTint(invader2.getChildren(), 0x00ff00);
         this.lights.enable().setAmbientColor(0x555555);
@@ -55,6 +70,8 @@ export class MyScene extends Phaser.Scene {
         con1.width = con1.height = 8000;
         const con2 = add.container(400, 400);
         con2.width = con2.height = 8000;
+        con.add(con1, LayoutType.MIDDLE_CENTER)
+        con.add(con2, LayoutType.MIDDLE_CENTER)
         const circle = new Phaser.Geom.Circle(0, 0, 10000);
         const rings = [
             {
@@ -137,13 +154,13 @@ export class MyScene extends Phaser.Scene {
             });
         }
 
-        tweens.add({
-            targets: [con1, con2],
-            scale: .5,
-            repeat: -1,
-            duration: 3000,
-            yoyo: true
-        })
+        // tweens.add({
+        //     targets: [con1, con2],
+        //     scale: .5,
+        //     repeat: -1,
+        //     duration: 3000,
+        //     yoyo: true
+        // })
 
         input.on('wheel', (_pointer: any, _gameObjects: any, _deltaX: any, deltaY: number) => {
 
@@ -173,13 +190,17 @@ export class MyScene extends Phaser.Scene {
     onEvent() {
         const child = this.children.getRandom();
         if (child) {
-            child
+            (child as Phaser.GameObjects.Image).preFX
         }
     }
 
 
     update(_delta: number) {
         this.originImg.setPosition(0, 0);
+    }
+
+    myTestFunc(a: number, b: number) {
+        return a + b;
     }
 
 }

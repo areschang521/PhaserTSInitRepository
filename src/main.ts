@@ -1,3 +1,4 @@
+import { MainUIContainer } from './core/MainUIContainer';
 import { Boot } from './scenes/Boot';
 import { Game as MainGame } from './scenes/Game';
 import { GameOver } from './scenes/GameOver';
@@ -11,13 +12,17 @@ import { Game, Types } from "phaser";
 //  https://newdocs.phaser.io/docs/3.70.0/Phaser.Types.Core.GameConfig
 const config: Types.Core.GameConfig = {
     type: Phaser.AUTO,
-    width: 1024,
-    height: 768,
+    width: 640,
+    height: 320,
     parent: 'game-container',
     backgroundColor: '#028af8',
+    autoRound: true,
+    // resizeInterval:100,
     scale: {
-        mode: Phaser.Scale.FIT,
-        autoCenter: Phaser.Scale.CENTER_BOTH
+        mode: 5,//横屏用5
+        // mode: 6,//竖屏用6
+
+        autoCenter: Phaser.Scale.CENTER_BOTH,
     },
     scene: [
         Boot,
@@ -29,4 +34,4 @@ const config: Types.Core.GameConfig = {
     ]
 };
 
-export default new Game(config);
+export var game = new Game(config);

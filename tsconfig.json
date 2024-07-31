@@ -15,11 +15,15 @@
         "resolveJsonModule": true,
         "isolatedModules": true,
         /* Linting */
-        "strict": true,
-        "strictPropertyInitialization": false,
-        "noUnusedLocals": true,
-        "noUnusedParameters": true,
-        "noFallthroughCasesInSwitch": true
+        // "strict": true,
+        // "strictPropertyInitialization": false,
+        // "noUnusedLocals": false,
+        // "noUnusedParameters": false,
+        "noFallthroughCasesInSwitch": true,
+        "alwaysStrict": true,
+        "importHelpers":true,
+        "declaration": true,
+        "experimentalDecorators": true,
     },
     "include": [
         "src"

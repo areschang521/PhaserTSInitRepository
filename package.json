@@ -36,5 +36,11 @@
     },
     "dependencies": {
         "phaser": "^3.80.1"
+    },
+    "eslintConfig": {
+        "extends": "airbnb-base",
+        "rules": {
+            "no-unused-vars": "off"
+        }
     }
 }
