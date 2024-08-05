@@ -1,11 +1,15 @@
 import { GameObjects, Scene } from 'phaser';
 import { getFixedLayout, MainUIContainer } from '../core/MainUIContainer';
 import { Layout, LayoutType } from '../core/Layout';
+import { CenterObjectContainer } from '../core/CenterObjectContainer';
+import { BgContainer } from '../core/BgContainer';
 export class MainMenu extends Scene {
     background: GameObjects.Image;
     logo: GameObjects.Image;
     title: GameObjects.Text;
     con: MainUIContainer;
+    bgCon: CenterObjectContainer;
+    testBg: GameObjects.Image;
     constructor() {
         super('MainMenu');
     }
@@ -13,13 +17,16 @@ export class MainMenu extends Scene {
     preload() {
         this.load.image("gem2", "assets/gem2.png");
         this.load.image("wow", "assets/wise.jpg");
+        this.load.image("earth", "assets/earth.jpg");
     }
 
     create() {
         let con = this.con = new MainUIContainer(this.game.scale, this);
-
-        this.background = this.add.image(0, 0, 'wow').setOrigin(0, 0);
-        con.add(this.background, LayoutType.TOP_LEFT)
+        this.testBg = this.add.image(0, 0, "earth").setOrigin(0, 0);
+        let bgCon = new BgContainer(this.game.scale, this, this.testBg);
+        this.background = this.add.image(320, 160, 'wow').setOrigin(.5, .5);
+        this.bgCon = new CenterObjectContainer(this.game.scale, this.background, this, this.background);
+        // con.add(this.background, LayoutType.MIDDLE_CENTER)
         this.logo = this.add.image(320, 160, 'logo').setOrigin(.5, .5);
         con.add(this.logo, LayoutType.MIDDLE_CENTER)
         let gem1 = this.add.image(0, 0, 'gem2').setOrigin(0, 0).setScale(.5);

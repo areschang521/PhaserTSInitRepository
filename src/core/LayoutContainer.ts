@@ -1,6 +1,7 @@
 import { LayoutHostObject } from "../structure/GameObject";
 import { Size } from "../structure/GeomDefine";
 import { Layout, LayoutType } from "./Layout";
+import { getFixedLayout } from "./MainUIContainer";
 export const Temp = {
     /**
           * 共享点1
@@ -46,6 +47,42 @@ export abstract class LayoutContainer extends Phaser.Events.EventEmitter {
             this.onStage();
         }
         // on(EventConst.ReLayout, this.onResize, this);
+    }
+
+    get machineType() {
+        return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ? 'Mobile' : 'Desktop'
+    }
+
+    getResultSize() {
+        let basis = this._basis;
+        let sw = window.innerWidth, sh = window.innerHeight, bw = basis.width, bh = basis.height;
+        let { lw, lh, scale, dw, dh } = getFixedLayout(sw, sh, bw, bh);
+        if (scale >= 1) {
+            // const machineType = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ? 'Mobile' : 'Desktop'
+            if (this.machineType === 'Mobile') {
+                console.log('移动端');
+                this._lw = sw;
+                this._lh = sh;
+                if (sw > 2000) {
+                    this._lw = 2000;
+                }
+                if (sh > 1000) {
+                    this._lh = 1000;
+                }
+            } else {
+                console.log('Pc端');
+                if (bw > bh) {
+                    this._lw = dw;
+                    this._lh = dh;
+                } else {
+                    this._lw = lw
+                    this._lh = lh;
+                }
+            }
+        } else {
+            this._lw = bw;
+            this._lh = bh;
+        }
     }
 
     /**

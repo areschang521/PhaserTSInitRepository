@@ -19,7 +19,7 @@ const config: Types.Core.GameConfig = {
     autoRound: true,
     // resizeInterval:100,
     scale: {
-        mode: 5,//横屏用5
+        mode: Phaser.Scale.ScaleModes.RESIZE,//横屏用5
         // mode: 6,//竖屏用6
 
         autoCenter: Phaser.Scale.CENTER_BOTH,

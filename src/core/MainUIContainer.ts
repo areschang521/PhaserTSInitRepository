@@ -10,7 +10,6 @@ export class MainUIContainer extends LayoutContainer {
             return;
         }
         const camera = this._host.cameras.main;
-        const scaleManager = this._host.game.scale;
         let basis = this._basis;
         let sw = window.innerWidth, sh = window.innerHeight, bw = basis.width, bh = basis.height;
         if (this.checkOffset) {
@@ -19,78 +18,122 @@ export class MainUIContainer extends LayoutContainer {
             sh -= top + bottom;
         }
         if (this.resizeFlag) { //屏幕宽高，任意一边小于基准宽高
-            let { lw, lh, scale, dw, dh } = getFixedLayout(sw, sh, bw, bh);
-
-            // if (bw > bh) {
-            //     this._lw = dw;
-            //     this._lh = dh;
+            // let { lw, lh, scale, dw, dh } = getFixedLayout(sw, sh, bw, bh);
+            // if (scale >= 1) {
+            //     let deltaX = 0;
+            //     let deltaY = 0;
+            //     const machineType = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ? 'Mobile' : 'Desktop'
+            //     if (machineType === 'Mobile') {
+            //         console.log('移动端');
+            //         this._lw = sw;
+            //         this._lh = sh;
+            //         if (sw > 2000) {
+            //             this._lw = 2000;
+            //         }
+            //         if (sh > 1000) {
+            //             this._lh = 1000;
+            //         }
+            //         deltaX = (sw - this._lw) >> 1;
+            //         deltaY = (sh - this._lh) >> 1;
+            //     } else {
+            //         console.log('Pc端');
+            //         if (bw > bh) {
+            //             this._lw = dw;
+            //             this._lh = dh;
+            //         } else {
+            //             this._lw = lw
+            //             this._lh = lh;
+            //         }
+            //         if (sw > this._lw) {
+            //             deltaX = (sw - this._lw) >> 1;
+            //         }
+            //         if (sh > this._lh) {
+            //             deltaY = (sh - this._lh) >> 1;
+            //         }
+            //     }
+            //     camera.zoom = 1;
+            //     camera.width = this._lw;
+            //     camera.height = this._lh;
+            //     camera.x = deltaX;
+            //     camera.y = deltaY;
+            //     camera.scrollX = camera.scrollY = 0;
             // } else {
-            //     this._lw = lw
-            //     this._lh = lh;
+            //     this._lw = bw;
+            //     this._lh = bh;
+            //     let scaleX = sw / bw;
+            //     let scaleY = sh / bh;
+            //     let scrollX = 0;
+            //     let scrollY = 0;
+            //     let posX = 0;
+            //     let posY = 0;
+            //     camera.zoom = scale;
+            //     camera.width = bw * scale;
+            //     camera.height = bh * scale;
+            //     if (scaleX < scaleY) {
+            //         posX = 0;
+            //         posY = (sh - this._lh * scale) >> 1;
+            //         scrollX = -(sw - this._lw) >> 1;
+            //         scrollY = scrollX * (bh / bw);
+            //     } else {
+            //         posX = (sw - this._lw * scale) >> 1;
+            //         posY = 0;
+            //         scrollY = -(sh - this._lh) >> 1;
+            //         scrollX = scrollY * (bw / bh);
+            //     }
+            //     camera.x = posX;
+            //     camera.y = posY;
+            //     camera.scrollX = scrollX;
+            //     camera.scrollY = scrollY;
             // }
+            this.getResultSize();
+            let { scale } = getFixedLayout(sw, sh, bw, bh);
             if (scale >= 1) {
-                const machineType = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ? 'Mobile' : 'Desktop'
-                if (machineType === 'Mobile') {
-                    console.log('移动端');
-                    camera.zoom = 1;
-                    this._lw = sw;
-                    this._lh = sh;
-                    if (sw > 2000) {
-                        this._lw = 2000;
-                    }
-                    if (sh > 1000) {
-                        this._lh = 1000;
-                    }
-                    camera.width = this._lw;
-                    camera.height = this._lh;
-                    let deltaX = 0;
-                    let deltaY = 0;
+                let deltaX = 0;
+                let deltaY = 0;
+                // const machineType = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ? 'Mobile' : 'Desktop'
+                if (this.machineType === 'Mobile') {
                     deltaX = (sw - this._lw) >> 1;
                     deltaY = (sh - this._lh) >> 1;
-                    camera.x = deltaX;
-                    camera.y = deltaY;
                 } else {
-                    console.log('Pc端');
-                    if (bw > bh) {
-                        this._lw = dw;
-                        this._lh = dh;
-                    } else {
-                        this._lw = lw
-                        this._lh = lh;
-                    }
-                    let deltaX = 0;
-                    let deltaY = 0;
                     if (sw > this._lw) {
                         deltaX = (sw - this._lw) >> 1;
                     }
                     if (sh > this._lh) {
                         deltaY = (sh - this._lh) >> 1;
                     }
-                    camera.zoom = 1;
-                    camera.width = this._lw;
-                    camera.height = this._lh;
-                    camera.x = deltaX;
-                    camera.y = deltaY;
-                    console.log(camera.height)
                 }
-            } else {
-                this._lw = bw;
-                this._lh = bh;
-                let zoomX = sw / this._lw;
-                let zoomY = sh / this._lh;
-                let zoom = Math.min(zoomX, zoomY);
-                camera.zoom = zoom
+                camera.zoom = 1;
                 camera.width = this._lw;
                 camera.height = this._lh;
-                let deltaX = 0;
-                let deltaY = 0;
-                deltaX = (sw - this._lw) >> 1;
-                deltaY = (sh - this._lh) >> 1;
                 camera.x = deltaX;
                 camera.y = deltaY;
-                console.log(`parentsize:${scaleManager.parentSize.width}----${scaleManager.parentSize.height}`)
+                camera.scrollX = camera.scrollY = 0;
+            } else {
+                let scaleX = sw / bw;
+                let scaleY = sh / bh;
+                let scrollX = 0;
+                let scrollY = 0;
+                let posX = 0;
+                let posY = 0;
+                camera.zoom = scale;
+                camera.width = bw * scale;
+                camera.height = bh * scale;
+                if (scaleX < scaleY) {
+                    posX = 0;
+                    posY = (sh - this._lh * scale) >> 1;
+                    scrollX = -(sw - this._lw) >> 1;
+                    scrollY = scrollX * (bh / bw);
+                } else {
+                    posX = (sw - this._lw * scale) >> 1;
+                    posY = 0;
+                    scrollY = -(sh - this._lh) >> 1;
+                    scrollX = scrollY * (bw / bh);
+                }
+                camera.x = posX;
+                camera.y = posY;
+                camera.scrollX = scrollX;
+                camera.scrollY = scrollY;
             }
-            console.log(camera.height)
             this.layoutAll();
         }
         this.emit("mainUI_Resize", this._lw, this._lh);
