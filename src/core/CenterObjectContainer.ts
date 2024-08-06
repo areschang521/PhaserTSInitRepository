@@ -1,26 +1,28 @@
+import { GameObjects, Geom, Scene } from "phaser";
 import { LayoutHostObject } from "../structure/GameObject";
 import { Size } from "../structure/GeomDefine";
 import { Layout, LayoutType } from "./Layout";
-import { LayoutBin, LayoutContainer } from "./LayoutContainer";
-import { getFixedLayout } from "./MainUIContainer";
+import { LayoutBin, LayoutContainer, Temp } from "./LayoutContainer";
 
 export class CenterObjectContainer extends LayoutContainer {
     protected _layout: LayoutType;
-    protected _bg: Phaser.GameObjects.GameObject
+    protected _display: GameObjects.GameObject
     protected _size: Size;
     private _dis: LayoutHostObject;
-    constructor(basis: Size, bg: Phaser.GameObjects.GameObject, scene: Phaser.Scene, size: Size, layout = LayoutType.MIDDLE_CENTER, offsetRect?: { x: number, y: number, width: number, height: number }) {
-        super(basis, scene);
+    private _autoScaleUp: boolean;
+    constructor(display: GameObjects.GameObject, scene: Scene, basis: Size, size: Size, maxSize?: Size, layout = LayoutType.MIDDLE_CENTER, autoScaleUp?: boolean, offsetRect?: { x: number, y: number, width: number, height: number }) {
+        super(scene, basis, maxSize);
         this._layout = layout;
-        this._bg = bg;
+        this._display = display;
         this._size = size;
+        this._autoScaleUp = autoScaleUp;
         //@ts-ignore
-        let raw = bg.getBounds();
+        let raw = display.getBounds();
         //@ts-ignore
-        raw.x += raw.width * bg.originX;
+        raw.x += raw.width * display.originX;
         //@ts-ignore
-        raw.y += raw.height * bg.originY;
-        offsetRect = offsetRect || new Phaser.Geom.Rectangle(0, 0, this._basis.width, this._basis.height);
+        raw.y += raw.height * display.originY;
+        offsetRect = offsetRect || new Geom.Rectangle(0, 0, this._basis.width, this._basis.height);
         let result = Layout.getLayoutPos(raw.width, raw.height, offsetRect.width, offsetRect.height, layout);
         let dx = raw.x - offsetRect.x;
         let dy = raw.y - offsetRect.y;
@@ -31,7 +33,7 @@ export class CenterObjectContainer extends LayoutContainer {
         let bin = { size: raw, type: layout, left, top, right, bottom, outerV: false, outerH: false }
         let dis = this._dis = {} as LayoutHostObject;
         //@ts-ignore
-        dis.size = bin.size || bg.getBounds();
+        dis.size = bin.size || display.getBounds();
         dis.$layoutHost = this;
         dis.type = bin.type;
         dis.left = bin.left;
@@ -43,25 +45,29 @@ export class CenterObjectContainer extends LayoutContainer {
     }
 
     onResize() {
-        let bg = this._bg;
-        if (bg) {
-            this.getResultSize();
-            let scaleX = this._lw / this._size.width;
-            let scaleY = this._lh / this._size.height;
-            let disScale = 1;
-            if (scaleX < 1 || scaleY < 1) {
-                disScale = Math.min(scaleX, scaleY);
-                (bg as Phaser.GameObjects.Image).setScale(disScale, disScale);
-            } else {
-                (bg as Phaser.GameObjects.Image).setScale(1, 1);
+        if (this._display?.active) {
+            const { _display, _size: { width: sizeWidth, height: sizeHeight }, _dis: { type, left: hoffset, top: voffset, outerV, outerH, size } } = this;
+            let { scale } = this.getResultSize();
+            if (scale > 1) {
+                let scaleX = this._lw / sizeWidth;
+                let scaleY = this._lh / sizeHeight;
+                let disScale = 1;
+                if (scaleX < 1 || scaleY < 1) {
+                    disScale = Math.min(scaleX, scaleY);
+                } else {
+                    if (this._autoScaleUp) {
+                        disScale = scale;
+                    }
+                }
+                //@ts-ignore
+                _display.setScale(disScale);
             }
-            const { type, left: hoffset, top: voffset, outerV, outerH, size } = this._dis;
-            let pt = { x: 0, y: 0 };
+            let pt = Temp.SharedPoint1
             Layout.getLayoutPos(size.width, size.height, this._lw, this._lh, type, pt, hoffset, voffset, outerV, outerH);
             //@ts-ignore
-            bg.x = pt.x;
+            _display.x = pt.x;
             //@ts-ignore
-            bg.y = pt.y;
+            _display.y = pt.y;
 
         }
     }

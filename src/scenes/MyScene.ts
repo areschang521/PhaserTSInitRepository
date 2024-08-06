@@ -37,7 +37,7 @@ export class MyScene extends Phaser.Scene {
     }
 
     create() {
-        let con = this.con = new MainUIContainer({ width: 1280, height: 640 }, this);
+        let con = this.con = new MainUIContainer(this, null, { width: 2000, height: 1000 });
         const { add, lights, input, scale: { width, height }, tweens, time, cameras } = this;
         this.bg = add.image(400, 300, "myImg").setPipeline("Light2D");
         let btn = ButtonCreator(this, 400, 300, "invader2", 0, 1, CallbackInfo.get(() => {

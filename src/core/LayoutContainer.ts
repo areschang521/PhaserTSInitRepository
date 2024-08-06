@@ -1,43 +1,37 @@
+import { Events, Scale, Scene } from "phaser";
+import { game } from "../main";
 import { LayoutHostObject } from "../structure/GameObject";
 import { Size } from "../structure/GeomDefine";
+import { d_memoize } from "./Decorators";
 import { Layout, LayoutType } from "./Layout";
 import { getFixedLayout } from "./MainUIContainer";
 export const Temp = {
-    /**
-          * 共享点1
-          */
     SharedPoint1: { x: 0, y: 0, z: 0 },
-
 }
 export interface LayoutBin {
     type?: LayoutType;
-
     left?: number;
-
     top?: number;
-
     offsetType?: number;
-
     outerV?: boolean;
     outerH?: boolean;
     size?: Size;
     right?: number;
     bottom?: number;
 }
-export abstract class LayoutContainer extends Phaser.Events.EventEmitter {
-    public static readonly MIN = Object.freeze({ width: 0, height: 0 });
-
+export abstract class LayoutContainer extends Events.EventEmitter {
     protected $layoutBins: LayoutHostObject[] = [];
 
     protected _lw: number;
     protected _lh: number;
-
-    protected _basis: Size = { width: 640, height: 320 };
-    protected _host: Phaser.Scene;
-    constructor(basis: Size, host: Phaser.Scene) {
+    protected _maxSize: Size;
+    protected _basis: Size;
+    protected _host: Scene;
+    constructor(host: Scene, basis?: Size, maxSize?: Size) {
         super();
-        // this._basis = basis;
         this._host = host;
+        this._basis = basis || { width: ~~game.config.width, height: ~~game.config.height };
+        this._maxSize = maxSize || { width: this._basis.width, height: this._basis.height };
         host.sys.events.on(Phaser.Scenes.Events.WAKE, this.onStage, this);
         host.sys.events.on(Phaser.Scenes.Events.ADDED_TO_SCENE, this.onStage, this);
         this._host.scale.on(Phaser.Scale.Events.RESIZE, this.onResize, this);
@@ -46,31 +40,31 @@ export abstract class LayoutContainer extends Phaser.Events.EventEmitter {
         if (host.sys.settings.active) {
             this.onStage();
         }
-        // on(EventConst.ReLayout, this.onResize, this);
     }
 
+    @d_memoize
     get machineType() {
         return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ? 'Mobile' : 'Desktop'
     }
 
     getResultSize() {
         let basis = this._basis;
+        const { width: mw, height: mh } = this._maxSize;
         let sw = window.innerWidth, sh = window.innerHeight, bw = basis.width, bh = basis.height;
         let { lw, lh, scale, dw, dh } = getFixedLayout(sw, sh, bw, bh);
         if (scale >= 1) {
-            // const machineType = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ? 'Mobile' : 'Desktop'
             if (this.machineType === 'Mobile') {
-                console.log('移动端');
+                console.log('Mobile');
                 this._lw = sw;
                 this._lh = sh;
-                if (sw > 2000) {
-                    this._lw = 2000;
+                if (sw > mw) {
+                    this._lw = mw;
                 }
-                if (sh > 1000) {
-                    this._lh = 1000;
+                if (sh > mh) {
+                    this._lh = mh;
                 }
             } else {
-                console.log('Pc端');
+                console.log('Pc');
                 if (bw > bh) {
                     this._lw = dw;
                     this._lh = dh;
@@ -83,14 +77,18 @@ export abstract class LayoutContainer extends Phaser.Events.EventEmitter {
             this._lw = bw;
             this._lh = bh;
         }
+        return { lw, lh, scale, dw, dh };
     }
 
     /**
-     * 重置尺寸
+     * resetBasis
      * @param basis     
      */
     resetBasis(basis: Size) {
         this._basis = basis;
+        const { width, height } = basis;
+        const { width: mw, height: mh } = this._maxSize;
+        this._maxSize = { width: width > mw ? width : mw, height: height > mh ? height : mh };
     }
 
     onStage() {
@@ -98,7 +96,7 @@ export abstract class LayoutContainer extends Phaser.Events.EventEmitter {
     }
 
     offStage() {
-        this._host.scale.off(Phaser.Scale.Events.RESIZE, this.onResize, this);
+        this._host.scale.off(Scale.Events.RESIZE, this.onResize, this);
     }
 
     abstract onResize();
@@ -127,38 +125,13 @@ export abstract class LayoutContainer extends Phaser.Events.EventEmitter {
         dis.outerV = bin.outerV;
         list.push(dis);
         if (hide) {
-            dis.destroy();
+            dis.removeFromDisplayList();
         } else {
-            // this._host.add(dis, false);
-            this._host.children.add(dis);
+            dis.addToDisplayList();
         }
         let stage = dis.active;
         if (stage) {
             this.binLayout(dis);
-        }
-        //不管在不在舞台上，都应该监听
-        dis.on(Phaser.GameObjects.Events.ADDED_TO_SCENE, this.onAdded.bind(this, dis), this);
-    }
-
-    public addLayout(dis: LayoutHostObject, type = LayoutType.TOP_LEFT, size?: Size, left?: number, top?: number, outerV?: boolean, outerH?: boolean, hide?: boolean) {
-        let list = this.$layoutBins;
-        if (list.indexOf(dis) != -1) {
-            return;
-        }
-        let bin = { dis, type, left, top, outerV, outerH, size } as LayoutBin;
-        this.addDis(dis, bin, hide);
-    }
-
-    protected onAdded(dis: LayoutHostObject) {
-        let host = dis.$layoutHost;
-        if (host) {
-            let set = host.$layoutBins;
-            if (set) {
-                let bin = set.indexOf(dis) == -1;
-                if (!bin) {
-                    this.binLayout(dis);
-                }
-            }
         }
     }
     protected binLayout(bin: LayoutHostObject) {

@@ -8,7 +8,8 @@ export class MainMenu extends Scene {
     logo: GameObjects.Image;
     title: GameObjects.Text;
     con: MainUIContainer;
-    bgCon: CenterObjectContainer;
+    centerCon: CenterObjectContainer;
+    bgCon: BgContainer
     testBg: GameObjects.Image;
     constructor() {
         super('MainMenu');
@@ -21,22 +22,21 @@ export class MainMenu extends Scene {
     }
 
     create() {
-        let con = this.con = new MainUIContainer(this.game.scale, this);
-        this.testBg = this.add.image(0, 0, "earth").setOrigin(0, 0);
-        let bgCon = new BgContainer(this.game.scale, this, this.testBg);
-        this.background = this.add.image(320, 160, 'wow').setOrigin(.5, .5);
-        this.bgCon = new CenterObjectContainer(this.game.scale, this.background, this, this.background);
-        // con.add(this.background, LayoutType.MIDDLE_CENTER)
-        this.logo = this.add.image(320, 160, 'logo').setOrigin(.5, .5);
-        con.add(this.logo, LayoutType.MIDDLE_CENTER)
+        let con = this.con = new MainUIContainer(this, null, { width: 2000, height: 1000 });
+        this.testBg = this.add.image(0, 0, "wow").setOrigin(0, 0);
+        this.bgCon = new BgContainer(this, null, this.testBg, { width: 2000, height: 1000 });
+        this.background = this.add.image(540, 320, 'earth').setOrigin(.5, .5);
+        this.centerCon = new CenterObjectContainer(this.background, this, null, this.background, { width: 2000, height: 1000 }, LayoutType.MIDDLE_CENTER, true);
+        this.logo = this.add.image(540, 320, 'logo').setOrigin(.5, .5);
+        con.add(this.logo, LayoutType.MIDDLE_CENTER);
         let gem1 = this.add.image(0, 0, 'gem2').setOrigin(0, 0).setScale(.5);
-        let gem2 = this.add.image(640, 0, 'gem2').setOrigin(1, 0).setScale(.5);
-        let gem3 = this.add.image(0, 320, 'gem2').setOrigin(0, 1).setScale(.5);
-        let gem4 = this.add.image(640, 320, 'gem2').setOrigin(1, 1).setScale(.5);
-        let gem5 = this.add.image(320, 0, 'gem2').setOrigin(.5, 0).setScale(.5);
-        let gem6 = this.add.image(640, 160, 'gem2').setOrigin(1, .5).setScale(.5);
-        let gem7 = this.add.image(320, 320, 'gem2').setOrigin(.5, 1).setScale(.5);
-        let gem8 = this.add.image(0, 160, 'gem2').setOrigin(0, .5).setScale(.5);
+        let gem2 = this.add.image(1080, 0, 'gem2').setOrigin(1, 0).setScale(.5);
+        let gem3 = this.add.image(0, 640, 'gem2').setOrigin(0, 1).setScale(.5);
+        let gem4 = this.add.image(1080, 640, 'gem2').setOrigin(1, 1).setScale(.5);
+        let gem5 = this.add.image(540, 0, 'gem2').setOrigin(.5, 0).setScale(.5);
+        let gem6 = this.add.image(1080, 320, 'gem2').setOrigin(1, .5).setScale(.5);
+        let gem7 = this.add.image(540, 640, 'gem2').setOrigin(.5, 1).setScale(.5);
+        let gem8 = this.add.image(0, 320, 'gem2').setOrigin(0, .5).setScale(.5);
         con.add(gem1, LayoutType.TOP_LEFT)
         con.add(gem2, LayoutType.TOP_RIGHT)
         con.add(gem3, LayoutType.BOTTOM_LEFT)
@@ -45,7 +45,7 @@ export class MainMenu extends Scene {
         con.add(gem6, LayoutType.MIDDLE_RIGHT)
         con.add(gem7, LayoutType.BOTTOM_CENTER)
         con.add(gem8, LayoutType.MIDDLE_LEFT)
-        this.title = this.add.text(320, 200, 'Main Menu', {
+        this.title = this.add.text(540, 350, 'Main Menu', {
             fontFamily: 'Arial Black', fontSize: 38, color: '#ffffff',
             stroke: '#000000', strokeThickness: 8,
             align: 'center'
@@ -57,8 +57,6 @@ export class MainMenu extends Scene {
             this.scene.start('my-scene');
 
         });
-        con.on("mainUI_Resize", this.onResize, this);
-        this.onResize();
     }
 
     testFunction(a: number, b: number) {
@@ -66,39 +64,10 @@ export class MainMenu extends Scene {
     }
 
     testCreateGameObject() {
-        return this.add.text(512, 460, 'Main Menu', {
+        return this.add.text(640, 360, 'Main Menu', {
             fontFamily: 'Arial Black', fontSize: 38, color: '#ffffff',
             stroke: '#000000', strokeThickness: 8,
             align: 'center'
         }).setOrigin(0.5);
-    }
-
-    onResize() {
-        // let basis = this.scale;
-        // let sw = window.innerWidth, sh = window.innerHeight, bw = 640, bh = 320;
-        // let result = getFixedLayout(sw, sh, bw, bh);
-        // let dh = result.dh;
-        // let dw = result.dw;
-        // let scale = result.scale;
-        // // if (scale > 1) {
-        // //     this.background.scaleX = this.background.scaleY = scale;
-        // //     let pt = { x: 0, y: 0 };
-        // //     Layout.getLayoutPos(dw, dh, sw, sh, LayoutType.TOP_LEFT, pt);
-        // //     this.background.x = pt.x;
-        // //     this.background.y = pt.y;
-        // // }
-        // if (scale >= 1) {
-        //     this.background.scaleX = this.background.scaleY = scale;
-
-        // } else {
-        //     let zoomX = sw / bw
-        //     let zoomY = sh / bh;
-        //     let zoom = Math.min(zoomX, zoomY);
-        //     this.background.scaleX = this.background.scaleY = zoom
-        // }
-        // let pt = { x: 0, y: 0 };
-        // Layout.getLayoutPos(dw, dh, sw, sh, LayoutType.TOP_LEFT, pt);
-        // this.background.x = pt.x;
-        // this.background.y = pt.y;
     }
 }

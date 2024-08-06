@@ -12,10 +12,10 @@ import { Game, Types } from "phaser";
 //  https://newdocs.phaser.io/docs/3.70.0/Phaser.Types.Core.GameConfig
 const config: Types.Core.GameConfig = {
     type: Phaser.AUTO,
-    width: 640,
-    height: 320,
+    width: 1080,
+    height: 640,
     parent: 'game-container',
-    backgroundColor: '#028af8',
+    backgroundColor: '#000000',
     autoRound: true,
     // resizeInterval:100,
     scale: {
