@@ -1,0 +1,189 @@
+{
+    "id": "03eaf29a-d09e-4c4a-b567-5cc774e980d6",
+    "sceneType": "SCENE",
+    "settings": {
+        "javaScriptInitFieldsInConstructor": true,
+        "exportClass": true,
+        "autoImport": true,
+        "preloadPackFiles": [
+            "template-webpack-ts-main/assets/lobby-pack.json"
+        ],
+        "createMethodName": "editorCreate",
+        "sceneKey": "ScrollScene",
+        "compilerOutputLanguage": "TYPE_SCRIPT",
+        "borderWidth": 1920,
+        "borderHeight": 1080
+    },
+    "displayList": [
+        {
+            "type": "Container",
+            "id": "7c3c1a25-03e5-4d07-8ce1-e236ddaee68b",
+            "label": "swiperCon",
+            "scope": "PUBLIC",
+            "x": 359.5525817871094,
+            "y": 241.41388132409986,
+            "list": [
+                {
+                    "type": "Rectangle",
+                    "id": "fd3f7154-85b1-46c3-a5b2-d48fc6b2dcd1",
+                    "label": "rectangle_1",
+                    "x": 600.4474107938938,
+                    "y": 298.58611867590014,
+                    "width": 1200,
+                    "height": 600
+                },
+                {
+                    "type": "Image",
+                    "id": "1c5bc60f-5ef6-48a2-b0a2-cbbf8903ddc9",
+                    "label": "item11",
+                    "scope": "PUBLIC",
+                    "texture": {
+                        "key": "lobby",
+                        "frame": "lobby_ic_promo_room01.png"
+                    },
+                    "x": 680.0626269752458,
+                    "y": 298.58611867590014
+                },
+                {
+                    "type": "Image",
+                    "id": "9e416fae-f632-4d98-b8d6-300f0abdd71a",
+                    "label": "item10",
+                    "scope": "PUBLIC",
+                    "texture": {
+                        "key": "lobby",
+                        "frame": "lobby_ic_promo_room02.png"
+                    },
+                    "x": 680.0626269752458,
+                    "y": 298.58611867590014
+                },
+                {
+                    "type": "Image",
+                    "id": "ab6188f4-47a1-4e25-a057-cbc15bbb6c28",
+                    "label": "item9",
+                    "scope": "PUBLIC",
+                    "texture": {
+                        "key": "lobby",
+                        "frame": "lobby_ic_promo_room03.png"
+                    },
+                    "x": 680.0626269752458,
+                    "y": 298.58611867590014
+                },
+                {
+                    "type": "Image",
+                    "id": "50dc5156-25df-4b16-a319-801437186591",
+                    "label": "item8",
+                    "scope": "PUBLIC",
+                    "texture": {
+                        "key": "lobby",
+                        "frame": "lobby_ic_promo_room04.png"
+                    },
+                    "x": 680.0626269752458,
+                    "y": 298.58611867590014
+                },
+                {
+                    "type": "Image",
+                    "id": "d9a22956-57b1-43fc-8430-17babaf666b9",
+                    "label": "item7",
+                    "scope": "PUBLIC",
+                    "texture": {
+                        "key": "lobby",
+                        "frame": "lobby_ic_promo_room05.png"
+                    },
+                    "x": 680.0626269752458,
+                    "y": 298.58611867590014
+                },
+                {
+                    "type": "Image",
+                    "id": "22ef3645-1845-4d31-8d6a-aec3467819ba",
+                    "label": "item6",
+                    "scope": "PUBLIC",
+                    "texture": {
+                        "key": "lobby",
+                        "frame": "lobby_ic_promo_room06.png"
+                    },
+                    "x": 680.0626269752458,
+                    "y": 298.58611867590014
+                },
+                {
+                    "type": "Image",
+                    "id": "560aa7b0-2b33-4103-b50e-68cdef6b75f2",
+                    "label": "item5",
+                    "scope": "PUBLIC",
+                    "texture": {
+                        "key": "lobby",
+                        "frame": "lobby_ic_standard_room01.png"
+                    },
+                    "x": 680.0626269752458,
+                    "y": 298.58611867590014
+                },
+                {
+                    "type": "Image",
+                    "id": "15fa12f6-13d7-4041-ab8a-1d13a40d0369",
+                    "label": "item4",
+                    "scope": "PUBLIC",
+                    "texture": {
+                        "key": "lobby",
+                        "frame": "lobby_ic_standard_room02.png"
+                    },
+                    "x": 1014,
+                    "y": 368
+                },
+                {
+                    "type": "Image",
+                    "id": "e91da0ae-d565-4276-aa73-9d664e6e43bb",
+                    "label": "item3",
+                    "scope": "PUBLIC",
+                    "texture": {
+                        "key": "lobby",
+                        "frame": "lobby_ic_standard_room03.png"
+                    },
+                    "x": 165,
+                    "y": 368
+                },
+                {
+                    "type": "Image",
+                    "id": "894a4222-8b07-447b-8b1d-98f403186af3",
+                    "label": "item2",
+                    "scope": "PUBLIC",
+                    "texture": {
+                        "key": "lobby",
+                        "frame": "lobby_ic_standard_room04.png"
+                    },
+                    "x": 795,
+                    "y": 335
+                },
+                {
+                    "type": "Image",
+                    "id": "39a2796a-566c-4d5e-8d1c-03f12c72e897",
+                    "label": "item1",
+                    "scope": "PUBLIC",
+                    "texture": {
+                        "key": "lobby",
+                        "frame": "lobby_ic_standard_room05.png"
+                    },
+                    "x": 382,
+                    "y": 335
+                },
+                {
+                    "type": "Image",
+                    "id": "c4f11408-418f-400b-993e-72fd56ddafef",
+                    "label": "item0",
+                    "scope": "PUBLIC",
+                    "texture": {
+                        "key": "lobby",
+                        "frame": "lobby_ic_standard_room06.png"
+                    },
+                    "x": 582,
+                    "y": 299
+                }
+            ]
+        }
+    ],
+    "plainObjects": [],
+    "meta": {
+        "app": "Phaser Editor - Scene Editor",
+        "url": "https://phaser.io/editor",
+        "contentType": "phasereditor2d.core.scene.SceneContentType",
+        "version": 5
+    }
+}

@@ -57,6 +57,7 @@ export class MyScene extends Phaser.Scene {
         this.lights.enable().setAmbientColor(0x555555);
         const spotLight = lights.addLight(0, 0, 200).setIntensity(2);
         this.posTF = this.add.text(0, 0, 'MousePostion').setScrollFactor(0).setColor('#ff0000');
+        // const { rawZoom } = cameras.main;
         input.on('pointermove', (pointer: { x: number; y: number; }) => {
             const { x, y } = pointer;
             let zoom = cameras.main.zoom;
@@ -163,12 +164,13 @@ export class MyScene extends Phaser.Scene {
         // })
 
         input.on('wheel', (_pointer: any, _gameObjects: any, _deltaX: any, deltaY: number) => {
-
             if (deltaY < 0) {
-                cameras.main.zoom += 0.1;
+                con1.scale += 0.1;
+                con2.scale += 0.1;
             }
             else if (deltaY > 0) {
-                cameras.main.zoom -= 0.1;
+                con1.scale -= 0.1;
+                con2.scale -= 0.1;
             }
             let zoom = cameras.main.zoom;
             let deltaH = (width / zoom - width) >> 1;

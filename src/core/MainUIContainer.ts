@@ -1,113 +1,92 @@
-import { Geom } from "phaser";
+import { GameObjects, Geom } from "phaser";
 import { LayoutHostObject } from "../structure/GameObject";
 import { Layout, LayoutType } from "./Layout";
-import { LayoutContainer } from "./LayoutContainer";
+import { LayoutConst, LayoutContainer } from "./LayoutContainer";
+import { EventConst } from "../EventConst";
 
 export class MainUIContainer extends LayoutContainer {
     resizeFlag = true;
-    checkOffset = true;
     onResize() {
         if (!this._host.sys.settings.active) {
             return;
         }
+
         const camera = this._host.cameras.main;
-        let basis = this._basis;
-        let sw = window.innerWidth, sh = window.innerHeight, bw = basis.width, bh = basis.height;
-        if (this.checkOffset) {
-            let { left, right, top, bottom } = Layout.offsets;
-            sw -= left + right;
-            sh -= top + bottom;
+        const basis = this._basis;
+        const sw = window.innerWidth,
+            sh = window.innerHeight,
+            bw = basis.width,
+            bh = basis.height;
+
+        this.getResultSize();
+
+        const { _lw: lw, _lh: lh } = this;
+        let { scale } = getFixedLayout(sw, sh, bw, bh);
+        if (scale > LayoutConst.MinScale) {
+            let deltaX = (sw - lw) >> 1;
+            let deltaY = (sh - lh) >> 1;
+            camera.width = lw;
+            camera.height = lh;
+            camera.x = deltaX;
+            camera.y = deltaY;
+            camera.scrollX = camera.scrollY = 0;
+        } else {
+            camera.width = lw;
+            camera.height = lh;
+            camera.x = 0;
+            camera.y = 0;
         }
-        if (this.resizeFlag) { //屏幕宽高，任意一边小于基准宽高
-            this.getResultSize();
-            let { scale } = getFixedLayout(sw, sh, bw, bh);
-            if (scale >= 1) {
-                let deltaX = 0;
-                let deltaY = 0;
-                if (this.machineType === 'Mobile') {
-                    deltaX = (sw - this._lw) >> 1;
-                    deltaY = (sh - this._lh) >> 1;
-                } else {
-                    if (sw > this._lw) {
-                        deltaX = (sw - this._lw) >> 1;
-                    }
-                    if (sh > this._lh) {
-                        deltaY = (sh - this._lh) >> 1;
-                    }
-                }
-                camera.zoom = 1;
-                camera.width = this._lw;
-                camera.height = this._lh;
-                camera.x = deltaX;
-                camera.y = deltaY;
-                camera.scrollX = camera.scrollY = 0;
-            } else {
-                let scaleX = sw / bw;
-                let scaleY = sh / bh;
-                let scrollX = 0;
-                let scrollY = 0;
-                let posX = 0;
-                let posY = 0;
-                camera.zoom = scale;
-                camera.width = bw * scale;
-                camera.height = bh * scale;
-                if (scaleX < scaleY) {
-                    posX = 0;
-                    posY = (sh - this._lh * scale) >> 1;
-                    scrollX = -(sw - this._lw) >> 1;
-                    scrollY = scrollX * (bh / bw);
-                } else {
-                    posX = (sw - this._lw * scale) >> 1;
-                    posY = 0;
-                    scrollY = -(sh - this._lh) >> 1;
-                    scrollX = scrollY * (bw / bh);
-                }
-                camera.x = posX;
-                camera.y = posY;
-                camera.scrollX = scrollX;
-                camera.scrollY = scrollY;
-            }
-            this.layoutAll();
-        }
-        this.emit("mainUI_Resize", this._lw, this._lh);
+
+        this.layoutAll();
+        this.emit(EventConst.MAINUI_RESIZE, lw, lh);
     }
 
+    public add(dis: LayoutHostObject, layoutType: LayoutType, origin = { x: 0.5, y: 0.5 }, offsetRect?: Geom.Rectangle, hide?: boolean) {
+        //@ts-ignore
+        const raw = dis.getBounds();
 
-    public add(d: LayoutHostObject, type: LayoutType, offsetRect?: { x: number, y: number, width: number, height: number }, hide?: boolean) {
-        //@ts-ignore
-        let raw = d.getBounds();
-        //@ts-ignore
-        raw.x += raw.width * d.originX;
-        //@ts-ignore
-        raw.y += raw.height * d.originY;
+        let posX = 0;
+        let posY = 0;
+        const isContainer = dis instanceof GameObjects.Container;
+        if (isContainer) {
+            posX = dis.x;
+            posY = dis.y;
+        } else {
+            //@ts-ignore
+            posX = raw.x + raw.width * dis.originX;
+            //@ts-ignore
+            posY = raw.y + raw.height * dis.originY;
+        }
+
         offsetRect = offsetRect || new Geom.Rectangle(0, 0, this._basis.width, this._basis.height);
-        let result = Layout.getLayoutPos(raw.width, raw.height, offsetRect.width, offsetRect.height, type);
-        let dx = raw.x - offsetRect.x;
-        let dy = raw.y - offsetRect.y;
-        let left = dx - result.x;
-        let top = dy - result.y;
-        let right = offsetRect.x + offsetRect.width - raw.x - raw.width;
-        let bottom = offsetRect.y + offsetRect.height - raw.y - raw.height;
 
-        this.addDis(d, { size: raw, type, left, top, right, bottom, outerV: false, outerH: false }, hide)
+        const result = Layout.getLayoutPos(raw.width, raw.height, offsetRect.width, offsetRect.height, layoutType);
+        const dx = posX - offsetRect.x;
+        const dy = posY - offsetRect.y;
+        const left = dx - result.x;
+        const top = dy - result.y;
+        const right = offsetRect.x + offsetRect.width - posX - raw.width;
+        const bottom = offsetRect.y + offsetRect.height - posY - raw.height;
+        dis.bindOriginX = origin.x;
+        dis.bindOriginY = origin.y;
+        dis.size = raw;
+        dis.isContainer = isContainer;
+        this.addDis(dis, { size: raw, type: layoutType, left, top, right, bottom, outerV: false, outerH: false }, hide);
+        return this;
     }
 
     protected binLayout(bin: LayoutHostObject) {
-        if (bin.type == LayoutType.FullScreen) {
-            let { top, left, bottom, right } = bin;
-            let host = this._host;
-            let scaleX = host.scale.displayScale.x;
-            let scaleY = host.scale.displayScale.y;
+        //@ts-ignore
+        if (bin.layoutType == LayoutType.FullScreen) {
+            const { bindTop: top, bindLeft: left, bindBottom: bottom, bindRight: right } = bin;
+            const host = this._host;
+            const scaleX = host.scale.displayScale.x;
+            const scaleY = host.scale.displayScale.y;
             //@ts-ignore
-            let rect = bin.getBounds();
-            let sw = window.innerWidth, sh = window.innerHeight
-            if (this.checkOffset) {
-                let { left, right, top, bottom } = Layout.offsets;
-                sw -= left + right;
-                sh -= top + bottom;
-            }
-            sw *= scaleX;
-            sh *= scaleY;
+            const rect = bin.getBounds();
+            const sw = window.innerWidth * scaleX,
+                sh = window.innerHeight * scaleY;
+
             if (left != undefined) {
                 bin.x = left;
                 if (right != undefined) {
@@ -117,6 +96,7 @@ export class MainUIContainer extends LayoutContainer {
             } else if (right != undefined) {
                 bin.x = sw - rect.width - right;
             }
+
             if (top != undefined) {
                 bin.y = top;
                 if (bottom != undefined) {
@@ -130,7 +110,6 @@ export class MainUIContainer extends LayoutContainer {
             super.binLayout(bin);
         }
     }
-
 }
 
 /**
@@ -138,27 +117,23 @@ export class MainUIContainer extends LayoutContainer {
  * @param sh 舞台高度
  * @param bw 要调整的可视对象宽度
  * @param bh 要调整的可视对象高度
- * @param {boolean} [isWide=false] fixedNarrow 还是 fixedWide，默认按fixedNarrow布局
  */
-export function getFixedLayout(sw: number, sh: number, bw: number, bh: number, isWide?: boolean) {
-    let dw = sw, dh = sh;
+export function getFixedLayout(sw: number, sh: number, bw: number, bh: number) {
+    let dw = sw,
+        dh = sh;
     let scaleX = sw / bw;
     let scaleY = sh / bh;
     let lw = bw;
     let lh = bh;
     let scale: number;
-    if (scaleX < scaleY == !isWide) {
+    if (scaleX < scaleY) {
         scale = scaleX;
         dh = scaleX * bh;
-        // let raw = bh / bw;
-        // lh = sw * raw;
-        lh = bh * sh / dh;
+        lh = (bh * sh) / dh;
     } else {
         scale = scaleY;
         dw = scaleY * bw;
-        lw = bw * sw / dw;
-        // let raw = bw / bh;
-        // lw = bh * raw;
+        lw = (bw * sw) / dw;
     }
     return { dw, dh, scale, lw, lh };
 }

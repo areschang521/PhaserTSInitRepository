@@ -2,73 +2,98 @@ import { GameObjects, Geom, Scene } from "phaser";
 import { LayoutHostObject } from "../structure/GameObject";
 import { Size } from "../structure/GeomDefine";
 import { Layout, LayoutType } from "./Layout";
-import { LayoutBin, LayoutContainer, Temp } from "./LayoutContainer";
+import { LayoutContainer, Temp } from "./LayoutContainer";
+import { EventConst } from "../EventConst";
+import { GAME_HEIGHT, GAME_WIDTH } from "./Const";
 
 export class CenterObjectContainer extends LayoutContainer {
-    protected _layout: LayoutType;
-    protected _display: GameObjects.GameObject
-    protected _size: Size;
-    private _dis: LayoutHostObject;
-    private _autoScaleUp: boolean;
-    constructor(display: GameObjects.GameObject, scene: Scene, basis: Size, size: Size, maxSize?: Size, layout = LayoutType.MIDDLE_CENTER, autoScaleUp?: boolean, offsetRect?: { x: number, y: number, width: number, height: number }) {
+    constructor(scene: Scene, basis?: Size, maxSize?: Size) {
         super(scene, basis, maxSize);
-        this._layout = layout;
-        this._display = display;
-        this._size = size;
-        this._autoScaleUp = autoScaleUp;
+    }
+
+    /**
+     *
+     * @param display 绑定的显示对象
+     * @param layout layoutType
+     * @param origin origin 用于处理容器的偏移(phaser的容器锚点默认为0，但是数据中默认为0.5，需手动从外部传入)
+     * @param autoScaleUp 是否根据容器大小/自身的设计比例缩放而进行缩放(默认不做缩放)
+     * @param offsetRect
+     */
+    add(display: LayoutHostObject, layout = LayoutType.MIDDLE_CENTER, origin = { x: 0, y: 0 }, autoScaleUp?: boolean, offsetRect?: { x: number; y: number; width: number; height: number }) {
         //@ts-ignore
         let raw = display.getBounds();
-        //@ts-ignore
-        raw.x += raw.width * display.originX;
-        //@ts-ignore
-        raw.y += raw.height * display.originY;
-        offsetRect = offsetRect || new Geom.Rectangle(0, 0, this._basis.width, this._basis.height);
-        let result = Layout.getLayoutPos(raw.width, raw.height, offsetRect.width, offsetRect.height, layout);
-        let dx = raw.x - offsetRect.x;
-        let dy = raw.y - offsetRect.y;
-        let left = dx - result.x;
-        let top = dy - result.y;
-        let right = offsetRect.x + offsetRect.width - raw.x - raw.width;
-        let bottom = offsetRect.y + offsetRect.height - raw.y - raw.height;
-        let bin = { size: raw, type: layout, left, top, right, bottom, outerV: false, outerH: false }
-        let dis = this._dis = {} as LayoutHostObject;
-        //@ts-ignore
-        dis.size = bin.size || display.getBounds();
-        dis.$layoutHost = this;
-        dis.type = bin.type;
-        dis.left = bin.left;
-        dis.top = bin.top;
-        dis.right = bin.right;
-        dis.bottom = bin.bottom;
-        dis.outerH = bin.outerH;
-        dis.outerV = bin.outerV;
+        const { width: rawWidth, height: rawHeight } = raw;
+        let posX = 0;
+        let posY = 0;
+        const isContainer = display instanceof GameObjects.Container;
+        if (isContainer) {
+            posX = display.x;
+            posY = display.y;
+        } else {
+            //@ts-ignore
+            posX = raw.x + rawWidth * display.originX;
+            //@ts-ignore
+            posY = raw.y + rawHeight * display.originY;
+        }
+        const { width: basisWidth, height: basisHeight } = this._basis;
+        offsetRect = offsetRect || new Geom.Rectangle(0, 0, basisWidth, basisHeight);
+        const { x: offsetX, y: offsetY, width: offsetWidth, height: offsetHeight } = offsetRect;
+        let result = Layout.getLayoutPos(rawWidth, rawHeight, offsetWidth, offsetHeight, layout);
+        display.size = raw;
+        display.$layoutHost = this;
+        display.layoutType = layout;
+        display.left = posX - offsetX - result.x;
+        display.top = posY - offsetY - result.y;
+        display.right = offsetX + offsetWidth - posX - rawWidth;
+        display.bottom = offsetY + offsetHeight - posY - rawHeight;
+        display.autoScaleUp = autoScaleUp;
+        display.initProportionX = basisWidth / rawWidth;
+        display.initProportionY = basisHeight / rawHeight;
+        display.bindOriginX = origin.x;
+        display.bindOriginY = origin.y;
+        display.isContainer = isContainer;
+        this.$layoutBins.push(display);
+        this.simpleLayout(display);
+        return this;
     }
 
     onResize() {
-        if (this._display?.active) {
-            const { _display, _size: { width: sizeWidth, height: sizeHeight }, _dis: { type, left: hoffset, top: voffset, outerV, outerH, size } } = this;
-            let { scale } = this.getResultSize();
-            if (scale > 1) {
-                let scaleX = this._lw / sizeWidth;
-                let scaleY = this._lh / sizeHeight;
-                let disScale = 1;
-                if (scaleX < 1 || scaleY < 1) {
-                    disScale = Math.min(scaleX, scaleY);
-                } else {
-                    if (this._autoScaleUp) {
-                        disScale = scale;
-                    }
-                }
-                //@ts-ignore
-                _display.setScale(disScale);
-            }
-            let pt = Temp.SharedPoint1
-            Layout.getLayoutPos(size.width, size.height, this._lw, this._lh, type, pt, hoffset, voffset, outerV, outerH);
-            //@ts-ignore
-            _display.x = pt.x;
-            //@ts-ignore
-            _display.y = pt.y;
-
+        if (this._host?.sys.settings.active) {
+            this.getResultSize();
+            const { $layoutBins } = this;
+            $layoutBins.forEach((display) => this.simpleLayout(display));
         }
+        this.emit(EventConst.MAINUI_RESIZE, this._lw, this._lh);
+    }
+
+    simpleLayout(display: LayoutHostObject) {
+        const { _lw: lw, _lh: lh } = this;
+        const {
+            size: { width: sizeWidth, height: sizeHeight },
+            layoutType,
+            bindLeft: left,
+            bindTop: top,
+            outerV,
+            outerH,
+            autoScaleUp,
+            bindOriginX,
+            bindOriginY,
+        } = display;
+
+        let disScale = 1;
+        if (autoScaleUp) {
+            let curWid = lw / GAME_WIDTH;
+            let curHei = lh / GAME_HEIGHT;
+            disScale = Math.min(curWid, curHei);
+        }
+        //@ts-ignore
+        display.setScale(disScale);
+
+        const pt = Temp.SharedPoint1;
+        Layout.getLayoutPos(sizeWidth, sizeHeight, lw, lh, layoutType, pt, left, top, outerV, outerH);
+        //@ts-ignore
+        display.x = pt.x + sizeWidth * (disScale - 1) * (bindOriginX - 0.5);
+        //@ts-ignore
+        display.y = pt.y + sizeHeight * (disScale - 1) * (bindOriginY - 0.5);
     }
 }

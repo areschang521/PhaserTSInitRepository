@@ -90,7 +90,7 @@ export class ArraySet<V> {
      * @param {V} value
      * @return {number} 返回值加入到数据中的索引
      */
-    public set(key: Key, value: V) {
+    public set(key: Key, value: V): number {
         const { _dict, _list } = this;
         let idx: number;
         let changed: boolean;

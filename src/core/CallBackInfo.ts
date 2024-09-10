@@ -1,10 +1,4 @@
-
-// interface DebugInfo {
-//     handle: string;
-//     stack: string;
-// }
-
-import { IRecyclable, recyclable } from "./IRecycle";
+import { IRecyclable, recyclable } from "./ClassUtils";
 
 function call(info: $CallbackInfo, ars?: ArrayLike<any>) {
     let args = [];
@@ -82,7 +76,7 @@ export class CallbackInfo<T extends Function> implements IRecyclable {
      * 检查回调是否一致，只检查参数和this对象,不检查参数
      */
     checkHandle(callback: T, thisObj: any) {
-        return this.callback === callback && this.thisObj == thisObj/* 允许null==undefined */;
+        return this.callback === callback && this.thisObj == thisObj /* 允许null==undefined */;
     }
 
     /**
@@ -106,7 +100,7 @@ export class CallbackInfo<T extends Function> implements IRecyclable {
      * 初始的参数会按顺序放在末位
      * @param args (description)
      */
-    call(...args: any[]): any
+    call(...args: any[]): any;
     call() {
         return call(this, arguments);
     }
@@ -115,9 +109,9 @@ export class CallbackInfo<T extends Function> implements IRecyclable {
      * 用于执行其他参数
      * 初始的参数会按顺序放在末位
      * 此方法会回收callbackInfo
-     * @param {any} args 
+     * @param {any} args
      */
-    callAndRecycle(...args: any): any
+    callAndRecycle(...args: any): any;
     callAndRecycle() {
         let result = call(this, arguments);
         this.recycle();
@@ -131,10 +125,7 @@ export class CallbackInfo<T extends Function> implements IRecyclable {
         this.doRecycle = true;
     }
 
-
-    recycle() {
-
-    };
+    recycle() {}
 
     /**
      * 获取CallbackInfo的实例
@@ -170,11 +161,11 @@ export class CallbackInfo<T extends Function> implements IRecyclable {
 
     /**
      * 加入到数组，不去重
-     * @param list 
-     * @param handle 
-     * @param thisObj 
-     * @param args 
-     * @returns 
+     * @param list
+     * @param handle
+     * @param thisObj
+     * @param args
+     * @returns
      */
     static addToList2<T extends Function>(list: CallbackInfo<T>[], handle: T, thisObj?: any, ...args: any[]) {
         //检查是否有this和handle相同的callback
@@ -211,4 +202,3 @@ export class CallbackInfo<T extends Function> implements IRecyclable {
         return info;
     }
 }
-

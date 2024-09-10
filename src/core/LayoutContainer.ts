@@ -5,8 +5,15 @@ import { Size } from "../structure/GeomDefine";
 import { d_memoize } from "./Decorators";
 import { Layout, LayoutType } from "./Layout";
 import { getFixedLayout } from "./MainUIContainer";
+import { GAME_HEIGHT, GAME_WIDTH } from "./Const";
 export const Temp = {
     SharedPoint1: { x: 0, y: 0, z: 0 },
+};
+export const enum LayoutConst {
+    MinScale = 0.6,
+    MaxWidth = 3840,
+    MaxHeight = 2160,
+    MaxLayoutScale = 1,
 }
 export interface LayoutBin {
     type?: LayoutType;
@@ -27,68 +34,94 @@ export abstract class LayoutContainer extends Events.EventEmitter {
     protected _maxSize: Size;
     protected _basis: Size;
     protected _host: Scene;
-    constructor(host: Scene, basis?: Size, maxSize?: Size) {
+    constructor(host: Scene, basis = { width: ~~game.config.width, height: ~~game.config.height }, maxSize = { width: Infinity, height: Infinity }) {
         super();
         this._host = host;
-        this._basis = basis || { width: ~~game.config.width, height: ~~game.config.height };
-        this._maxSize = maxSize || { width: this._basis.width, height: this._basis.height };
+        this._basis = basis;
+        this._maxSize = maxSize;
         host.sys.events.on(Phaser.Scenes.Events.WAKE, this.onStage, this);
-        host.sys.events.on(Phaser.Scenes.Events.ADDED_TO_SCENE, this.onStage, this);
         this._host.scale.on(Phaser.Scale.Events.RESIZE, this.onResize, this);
-        // host.sys.events.on(Phaser.Scenes.Events.REMOVED_FROM_SCENE, this.offStage, this);
-        // host.sys.events.on(Phaser.Scenes.Events.SLEEP, this.offStage, this);
         if (host.sys.settings.active) {
             this.onStage();
         }
+        return this;
     }
 
     @d_memoize
     get machineType() {
-        return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ? 'Mobile' : 'Desktop'
+        return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ? "Mobile" : "Desktop";
     }
 
     getResultSize() {
-        let basis = this._basis;
+        const basis = this._basis;
         const { width: mw, height: mh } = this._maxSize;
-        let sw = window.innerWidth, sh = window.innerHeight, bw = basis.width, bh = basis.height;
+        const sw = window.innerWidth,
+            sh = window.innerHeight,
+            bw = basis.width,
+            bh = basis.height;
+
         let { lw, lh, scale, dw, dh } = getFixedLayout(sw, sh, bw, bh);
-        if (scale >= 1) {
-            if (this.machineType === 'Mobile') {
-                console.log('Mobile');
-                this._lw = sw;
-                this._lh = sh;
-                if (sw > mw) {
-                    this._lw = mw;
-                }
-                if (sh > mh) {
-                    this._lh = mh;
-                }
-            } else {
-                console.log('Pc');
-                if (bw > bh) {
-                    this._lw = dw;
-                    this._lh = dh;
-                } else {
-                    this._lw = lw
-                    this._lh = lh;
-                }
+
+        if (scale > LayoutConst.MinScale) {
+            this._lw = sw;
+            this._lh = sh;
+            if (sw > mw) {
+                this._lw = mw;
+            }
+            if (sh > mh) {
+                this._lh = mh;
             }
         } else {
-            this._lw = bw;
-            this._lh = bh;
+            const scaleX = sw / bw;
+            const scaleY = sh / bh;
+            if (scaleX < scaleY) {
+                this._lw = bw * LayoutConst.MinScale;
+                if (scaleY < LayoutConst.MinScale) {
+                    this._lh = bh * LayoutConst.MinScale;
+                } else {
+                    this._lh = sh;
+                }
+            } else {
+                if (scaleX < LayoutConst.MinScale) {
+                    this._lw = bw * LayoutConst.MinScale;
+                } else {
+                    this._lw = sw;
+                }
+                this._lh = bh * LayoutConst.MinScale;
+            }
         }
+
         return { lw, lh, scale, dw, dh };
     }
 
     /**
+     * get the game width by current screen size
+     * @returns
+     */
+    getLW() {
+        return this._lw;
+    }
+
+    /**
+     * get the game height by current screen size
+     * @returns
+     */
+    getLH() {
+        return this._lh;
+    }
+
+    /**
      * resetBasis
-     * @param basis     
+     * @param basis
      */
     resetBasis(basis: Size) {
         this._basis = basis;
         const { width, height } = basis;
         const { width: mw, height: mh } = this._maxSize;
-        this._maxSize = { width: width > mw ? width : mw, height: height > mh ? height : mh };
+        this._maxSize = {
+            width: width > mw ? width : mw,
+            height: height > mh ? height : mh,
+        };
     }
 
     onStage() {
@@ -106,53 +139,67 @@ export abstract class LayoutContainer extends Events.EventEmitter {
     }
 
     addDis(dis: LayoutHostObject, bin?: LayoutBin, hide?: boolean) {
-        let list = this.$layoutBins;
+        const list = this.$layoutBins;
         if (list.indexOf(dis) != -1) {
             return;
         }
         //@ts-ignore
-        bin = bin || { type: LayoutType.TOP_LEFT, size: dis.getBounds() } as LayoutBin;
-        //@ts-ignore
         dis.size = bin.size || dis.getBounds();
         dis.$layoutHost = this;
-        dis.type = bin.type;
-        dis.left = bin.left;
-        dis.top = bin.top;
-        dis.right = bin.right;
-        dis.bottom = bin.bottom;
+        dis.layoutType = bin.type;
+        dis.bindLeft = bin.left;
+        dis.bindTop = bin.top;
+        dis.bindRight = bin.right;
+        dis.bindBottom = bin.bottom;
         dis.offsetType = bin.offsetType;
         dis.outerH = bin.outerH;
         dis.outerV = bin.outerV;
         list.push(dis);
+
         if (hide) {
             dis.removeFromDisplayList();
         } else {
+            // if (dis.displayList == null) {
             dis.addToDisplayList();
+            // }
         }
+
         let stage = dis.active;
         if (stage) {
             this.binLayout(dis);
         }
     }
-    protected binLayout(bin: LayoutHostObject) {
-        const { type, left: hoffset, top: voffset, outerV, outerH, size } = bin;
-        let pt = Temp.SharedPoint1;
-        Layout.getLayoutPos(size.width, size.height, this._lw, this._lh, type, pt, hoffset, voffset, outerV, outerH);
-        bin.x = pt.x;
-        bin.y = pt.y;
+    protected binLayout(dis: LayoutHostObject) {
+        const {
+            layoutType,
+            bindLeft: hoffset,
+            bindTop: voffset,
+            outerV,
+            outerH,
+            size: { width: sizeWidth, height: sizeHeight },
+        } = dis;
+
+        const pt = Temp.SharedPoint1;
+        Layout.getLayoutPos(sizeWidth, sizeHeight, this._lw, this._lh, layoutType, pt, hoffset, voffset, outerV, outerH);
+
+        let disScale = 1;
+        let curWid = this._lw / GAME_WIDTH;
+        let curHei = this._lh / GAME_HEIGHT;
+        disScale = Math.min(curWid, curHei, LayoutConst.MaxLayoutScale);
+        //@ts-ignore
+        dis.setScale(disScale);
+        //@ts-ignore
+        dis.x = pt.x;
+        //@ts-ignore
+        dis.y = pt.y;
     }
 
-    protected $doLayout() {
-        setTimeout(() => {
-            this.layoutAll();
-        }, 100);
-    }
     protected layoutAll() {
         let list = this.$layoutBins;
         if (list) {
-            for (let i = 0, len = list.length; i < len;) {
+            for (let i = 0, len = list.length; i < len; ) {
                 this.binLayout(list[i++]);
             }
         }
     }
-}   
+}

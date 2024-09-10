@@ -1,6 +1,7 @@
 export const enum ClassConst {
-    DebugIDPropertyKey = "_insid"
+    DebugIDPropertyKey = "_insid",
 }
+
 export const enum RecycleState {
     /**
      * 未初始化，已回收
@@ -8,7 +9,7 @@ export const enum RecycleState {
     Recycled = 0b00,
 
     /**
-     * 准备回收  
+     * 准备回收
      * 准备放入池，正在执行 onRecycle 方法
      */
     Recycling = 0b01,
@@ -19,7 +20,7 @@ export const enum RecycleState {
     Spawn = 0b10,
 
     /**
-     * 准备初始化  
+     * 准备初始化
      * 已经从回收池中拿出，正在执行 onSpawn 方法
      */
     Spawning = 0b11,
@@ -38,22 +39,21 @@ export const enum RecycleState {
 /**
  * 创建器
  */
-export type Creator<T> = { new(): T } | { (): T };
+export type Creator<T> = { new (): T } | { (): T };
 /**
- * 
+ *
  * 调整ClassFactory
  * @export
  * @class ClassFactory
  * @template T
  */
 export class ClassFactory<T> {
-
     private _creator: Creator<T>;
 
-    private _props: Partial<T> | undefined;
+    private _props: Partial<T>;
 
     /**
-     * @param {Creator<T>} creator 
+     * @param {Creator<T>} creator
      * @param {Partial<T>} [props] 属性模板
      * @memberof ClassFactory
      */
@@ -64,8 +64,8 @@ export class ClassFactory<T> {
 
     /**
      * 获取实例
-     * 
-     * @returns 
+     *
+     * @returns
      */
     public get() {
         let ins = new (this._creator as any)();
@@ -77,10 +77,9 @@ export class ClassFactory<T> {
     }
 }
 
-
 /**
  * 可回收的对象
- * 
+ *
  * @export
  * @interface IRecyclable
  */
@@ -88,11 +87,11 @@ export interface IRecyclable {
     /**
      * 回收时触发
      */
-    onRecycle?: { (): any };
+    onRecycle?: { () };
     /**
      * 启用时触发
      */
-    onSpawn?: { (): any };
+    onSpawn?: { () };
 
     /**
      * @readonly
@@ -100,8 +99,8 @@ export interface IRecyclable {
     $recState?: RecycleState;
 
     /**
-     * 回收对象的唯一自增标识  
-     * 从回收池取出后，会变化  
+     * 回收对象的唯一自增标识
+     * 从回收池取出后，会变化
      * 此属性只有在`DEBUG`时有效
      */
     _insid?: number;
@@ -112,7 +111,6 @@ export interface IRecyclable {
  *
  */
 export class RecyclablePool<T> {
-
     private _pool: T[];
     private _max: number;
     private _creator: Creator<T>;
@@ -121,25 +119,14 @@ export class RecyclablePool<T> {
         let ins: T & IRecyclable;
         let pool = this._pool;
         if (pool.length) {
-            //@ts-ignore
             ins = pool.pop();
         } else {
             ins = new (this._creator as any)();
-            // if (DEBUG) {
-            //     Object.defineProperty(ins, ClassConst.DebugIDPropertyKey, {
-            //         value: 0,
-            //         enumerable: false,
-            //         writable: true
-            //     })
-            // }
         }
-        ins.$recState = RecycleState.Spawning
+        ins.$recState = RecycleState.Spawning;
         if (typeof ins.onSpawn === "function") {
             ins.onSpawn();
         }
-        // if (DEBUG) {
-        //     ins[ClassConst.DebugIDPropertyKey] = _recid++;
-        // }
         ins.$recState = RecycleState.Spawn;
         return ins;
     }
@@ -150,7 +137,7 @@ export class RecyclablePool<T> {
     public recycle(t: T & IRecyclable) {
         const state = t.$recState;
         if (state === RecycleState.Recycling || state === RecycleState.Recycled) {
-            return
+            return;
         }
         const pool = this._pool;
         t.$recState = RecycleState.Recycling;
@@ -169,7 +156,7 @@ export class RecyclablePool<T> {
         this._creator = TCreator;
     }
 }
-export type Recyclable<T> = T & { recycle(): void, $recState?: RecycleState };
+export type Recyclable<T> = T & { recycle(): void; $recState?: RecycleState };
 
 /**
  * 获取一个recyclable的对象
@@ -181,7 +168,7 @@ export type Recyclable<T> = T & { recycle(): void, $recState?: RecycleState };
  * @returns {Recyclable<T>}
  */
 export function recyclable<T>(clazz: Creator<T> & { _pool?: RecyclablePool<T> }, addInstanceRecycle?: boolean): Recyclable<T> {
-    let pool: RecyclablePool<T> | undefined;
+    let pool: RecyclablePool<T>;
     if (clazz.hasOwnProperty("_pool")) {
         pool = clazz._pool;
     }
@@ -191,8 +178,7 @@ export function recyclable<T>(clazz: Creator<T> & { _pool?: RecyclablePool<T> },
                 let ins = new (clazz as any)();
                 ins.recycle = recycle;
                 return ins;
-            })
-
+            });
         } else {
             pool = new RecyclablePool(clazz);
             let pt = clazz.prototype;
@@ -201,12 +187,12 @@ export function recyclable<T>(clazz: Creator<T> & { _pool?: RecyclablePool<T> },
             }
         }
         Object.defineProperty(clazz, "_pool", {
-            value: pool
-        })
+            value: pool,
+        });
     }
     return pool.get() as Recyclable<T>;
-    function recycle(this: any) {
-        pool?.recycle(this);
+    function recycle() {
+        pool.recycle(this);
     }
 }
 
@@ -228,4 +214,22 @@ recyclable.recycleList =
             }
             list.length = len;
         }
+    };
+
+/**
+ * 单例工具
+ * @param clazz 要做单例的类型
+ */
+export function singleton<T>(clazz: { new (): T; _instance?: T }): T {
+    let instance: T;
+    if (clazz.hasOwnProperty("_instance")) {
+        instance = clazz._instance;
     }
+    if (!instance) {
+        instance = new clazz();
+        Object.defineProperty(clazz, "_instance", {
+            value: instance,
+        });
+    }
+    return instance;
+}

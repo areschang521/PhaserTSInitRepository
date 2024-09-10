@@ -1,0 +1,995 @@
+{
+    "frames": [
+        {
+            "filename": "lobby_btn_bg.png",
+            "trimmed": false,
+            "frame": {
+                "x": 298,
+                "y": 748,
+                "w": 501,
+                "h": 149
+            },
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 501,
+                "h": 149
+            },
+            "sourceSize": {
+                "w": 501,
+                "h": 149
+            }
+        },
+        {
+            "filename": "lobby_btn_highlight.png",
+            "trimmed": false,
+            "frame": {
+                "x": 571,
+                "y": 993,
+                "w": 271,
+                "h": 162
+            },
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 271,
+                "h": 162
+            },
+            "sourceSize": {
+                "w": 271,
+                "h": 162
+            }
+        },
+        {
+            "filename": "lobby_btn_home.png",
+            "trimmed": false,
+            "frame": {
+                "x": 529,
+                "y": 667,
+                "w": 61,
+                "h": 58
+            },
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 61,
+                "h": 58
+            },
+            "sourceSize": {
+                "w": 61,
+                "h": 58
+            }
+        },
+        {
+            "filename": "lobby_btn_normal.png",
+            "trimmed": false,
+            "frame": {
+                "x": 298,
+                "y": 993,
+                "w": 271,
+                "h": 162
+            },
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 271,
+                "h": 162
+            },
+            "sourceSize": {
+                "w": 271,
+                "h": 162
+            }
+        },
+        {
+            "filename": "lobby_btn_plus.png",
+            "trimmed": false,
+            "frame": {
+                "x": 958,
+                "y": 1066,
+                "w": 44,
+                "h": 45
+            },
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 44,
+                "h": 45
+            },
+            "sourceSize": {
+                "w": 44,
+                "h": 45
+            }
+        },
+        {
+            "filename": "lobby_btn_promo_highlight.png",
+            "trimmed": false,
+            "frame": {
+                "x": 778,
+                "y": 1515,
+                "w": 239,
+                "h": 162
+            },
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 239,
+                "h": 162
+            },
+            "sourceSize": {
+                "w": 239,
+                "h": 162
+            }
+        },
+        {
+            "filename": "lobby_btn_promo_normal.png",
+            "trimmed": false,
+            "frame": {
+                "x": 801,
+                "y": 1838,
+                "w": 239,
+                "h": 157
+            },
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 239,
+                "h": 157
+            },
+            "sourceSize": {
+                "w": 239,
+                "h": 157
+            }
+        },
+        {
+            "filename": "lobby_btn_redeem_sc.png",
+            "trimmed": false,
+            "frame": {
+                "x": 320,
+                "y": 592,
+                "w": 206,
+                "h": 59
+            },
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 206,
+                "h": 59
+            },
+            "sourceSize": {
+                "w": 206,
+                "h": 59
+            }
+        },
+        {
+            "filename": "lobby_btn_setting.png",
+            "trimmed": false,
+            "frame": {
+                "x": 844,
+                "y": 1096,
+                "w": 56,
+                "h": 59
+            },
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 56,
+                "h": 59
+            },
+            "sourceSize": {
+                "w": 56,
+                "h": 59
+            }
+        },
+        {
+            "filename": "lobby_btn_standard_highlight.png",
+            "trimmed": false,
+            "frame": {
+                "x": 778,
+                "y": 1351,
+                "w": 239,
+                "h": 162
+            },
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 239,
+                "h": 162
+            },
+            "sourceSize": {
+                "w": 239,
+                "h": 162
+            }
+        },
+        {
+            "filename": "lobby_btn_standard_normal.png",
+            "trimmed": false,
+            "frame": {
+                "x": 801,
+                "y": 1679,
+                "w": 239,
+                "h": 157
+            },
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 239,
+                "h": 157
+            },
+            "sourceSize": {
+                "w": 239,
+                "h": 157
+            }
+        },
+        {
+            "filename": "lobby_downbar_cover.png",
+            "trimmed": false,
+            "frame": {
+                "x": 298,
+                "y": 899,
+                "w": 538,
+                "h": 92
+            },
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 538,
+                "h": 92
+            },
+            "sourceSize": {
+                "w": 538,
+                "h": 92
+            }
+        },
+        {
+            "filename": "lobby_ic_collectibles.png",
+            "trimmed": false,
+            "frame": {
+                "x": 958,
+                "y": 973,
+                "w": 97,
+                "h": 91
+            },
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 97,
+                "h": 91
+            },
+            "sourceSize": {
+                "w": 97,
+                "h": 91
+            }
+        },
+        {
+            "filename": "lobby_ic_daily.png",
+            "trimmed": false,
+            "frame": {
+                "x": 298,
+                "y": 653,
+                "w": 84,
+                "h": 93
+            },
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 84,
+                "h": 93
+            },
+            "sourceSize": {
+                "w": 84,
+                "h": 93
+            }
+        },
+        {
+            "filename": "lobby_ic_event.png",
+            "trimmed": false,
+            "frame": {
+                "x": 924,
+                "y": 765,
+                "w": 72,
+                "h": 106
+            },
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 72,
+                "h": 106
+            },
+            "sourceSize": {
+                "w": 72,
+                "h": 106
+            }
+        },
+        {
+            "filename": "lobby_ic_favorite_se.png",
+            "trimmed": false,
+            "frame": {
+                "x": 902,
+                "y": 1096,
+                "w": 54,
+                "h": 45
+            },
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 54,
+                "h": 45
+            },
+            "sourceSize": {
+                "w": 54,
+                "h": 45
+            }
+        },
+        {
+            "filename": "lobby_ic_favorite_unse.png",
+            "trimmed": false,
+            "frame": {
+                "x": 240,
+                "y": 1729,
+                "w": 54,
+                "h": 45
+            },
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 54,
+                "h": 45
+            },
+            "sourceSize": {
+                "w": 54,
+                "h": 45
+            }
+        },
+        {
+            "filename": "lobby_ic_friends.png",
+            "trimmed": false,
+            "frame": {
+                "x": 384,
+                "y": 653,
+                "w": 143,
+                "h": 91
+            },
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 143,
+                "h": 91
+            },
+            "sourceSize": {
+                "w": 143,
+                "h": 91
+            }
+        },
+        {
+            "filename": "lobby_ic_leaderboard.png",
+            "trimmed": false,
+            "frame": {
+                "x": 844,
+                "y": 988,
+                "w": 112,
+                "h": 106
+            },
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 112,
+                "h": 106
+            },
+            "sourceSize": {
+                "w": 112,
+                "h": 106
+            }
+        },
+        {
+            "filename": "lobby_ic_mission.png",
+            "trimmed": false,
+            "frame": {
+                "x": 146,
+                "y": 1951,
+                "w": 87,
+                "h": 88
+            },
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 87,
+                "h": 88
+            },
+            "sourceSize": {
+                "w": 87,
+                "h": 88
+            }
+        },
+        {
+            "filename": "lobby_ic_more_games.png",
+            "trimmed": false,
+            "frame": {
+                "x": 801,
+                "y": 748,
+                "w": 121,
+                "h": 123
+            },
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 121,
+                "h": 123
+            },
+            "sourceSize": {
+                "w": 121,
+                "h": 123
+            }
+        },
+        {
+            "filename": "lobby_ic_piggy_bank.png",
+            "trimmed": false,
+            "frame": {
+                "x": 529,
+                "y": 592,
+                "w": 85,
+                "h": 73
+            },
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 85,
+                "h": 73
+            },
+            "sourceSize": {
+                "w": 85,
+                "h": 73
+            }
+        },
+        {
+            "filename": "lobby_ic_promo.png",
+            "trimmed": false,
+            "frame": {
+                "x": 778,
+                "y": 1157,
+                "w": 187,
+                "h": 192
+            },
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 187,
+                "h": 192
+            },
+            "sourceSize": {
+                "w": 187,
+                "h": 192
+            }
+        },
+        {
+            "filename": "lobby_ic_promo_room01.png",
+            "trimmed": false,
+            "frame": {
+                "x": 563,
+                "y": 1729,
+                "w": 236,
+                "h": 284
+            },
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 236,
+                "h": 284
+            },
+            "sourceSize": {
+                "w": 236,
+                "h": 284
+            }
+        },
+        {
+            "filename": "lobby_ic_promo_room02.png",
+            "trimmed": false,
+            "frame": {
+                "x": 325,
+                "y": 1729,
+                "w": 236,
+                "h": 284
+            },
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 236,
+                "h": 284
+            },
+            "sourceSize": {
+                "w": 236,
+                "h": 284
+            }
+        },
+        {
+            "filename": "lobby_ic_promo_room03.png",
+            "trimmed": false,
+            "frame": {
+                "x": 540,
+                "y": 1443,
+                "w": 236,
+                "h": 284
+            },
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 236,
+                "h": 284
+            },
+            "sourceSize": {
+                "w": 236,
+                "h": 284
+            }
+        },
+        {
+            "filename": "lobby_ic_promo_room04.png",
+            "trimmed": false,
+            "frame": {
+                "x": 302,
+                "y": 1443,
+                "w": 236,
+                "h": 284
+            },
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 236,
+                "h": 284
+            },
+            "sourceSize": {
+                "w": 236,
+                "h": 284
+            }
+        },
+        {
+            "filename": "lobby_ic_promo_room05.png",
+            "trimmed": false,
+            "frame": {
+                "x": 540,
+                "y": 1157,
+                "w": 236,
+                "h": 284
+            },
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 236,
+                "h": 284
+            },
+            "sourceSize": {
+                "w": 236,
+                "h": 284
+            }
+        },
+        {
+            "filename": "lobby_ic_promo_room06.png",
+            "trimmed": false,
+            "frame": {
+                "x": 302,
+                "y": 1157,
+                "w": 236,
+                "h": 284
+            },
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 236,
+                "h": 284
+            },
+            "sourceSize": {
+                "w": 236,
+                "h": 284
+            }
+        },
+        {
+            "filename": "lobby_ic_slots.png",
+            "trimmed": false,
+            "frame": {
+                "x": 2,
+                "y": 1951,
+                "w": 142,
+                "h": 88
+            },
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 142,
+                "h": 88
+            },
+            "sourceSize": {
+                "w": 142,
+                "h": 88
+            }
+        },
+        {
+            "filename": "lobby_ic_special_event.png",
+            "trimmed": false,
+            "frame": {
+                "x": 320,
+                "y": 2,
+                "w": 294,
+                "h": 588
+            },
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 294,
+                "h": 588
+            },
+            "sourceSize": {
+                "w": 294,
+                "h": 588
+            }
+        },
+        {
+            "filename": "lobby_ic_standard.png",
+            "trimmed": false,
+            "frame": {
+                "x": 938,
+                "y": 574,
+                "w": 146,
+                "h": 148
+            },
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 146,
+                "h": 148
+            },
+            "sourceSize": {
+                "w": 146,
+                "h": 148
+            }
+        },
+        {
+            "filename": "lobby_ic_standard_room01.png",
+            "trimmed": false,
+            "frame": {
+                "x": 854,
+                "y": 288,
+                "w": 236,
+                "h": 284
+            },
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 236,
+                "h": 284
+            },
+            "sourceSize": {
+                "w": 236,
+                "h": 284
+            }
+        },
+        {
+            "filename": "lobby_ic_standard_room02.png",
+            "trimmed": false,
+            "frame": {
+                "x": 616,
+                "y": 288,
+                "w": 236,
+                "h": 284
+            },
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 236,
+                "h": 284
+            },
+            "sourceSize": {
+                "w": 236,
+                "h": 284
+            }
+        },
+        {
+            "filename": "lobby_ic_standard_room03.png",
+            "trimmed": false,
+            "frame": {
+                "x": 2,
+                "y": 1490,
+                "w": 236,
+                "h": 284
+            },
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 236,
+                "h": 284
+            },
+            "sourceSize": {
+                "w": 236,
+                "h": 284
+            }
+        },
+        {
+            "filename": "lobby_ic_standard_room04.png",
+            "trimmed": false,
+            "frame": {
+                "x": 854,
+                "y": 2,
+                "w": 236,
+                "h": 284
+            },
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 236,
+                "h": 284
+            },
+            "sourceSize": {
+                "w": 236,
+                "h": 284
+            }
+        },
+        {
+            "filename": "lobby_ic_standard_room05.png",
+            "trimmed": false,
+            "frame": {
+                "x": 616,
+                "y": 2,
+                "w": 236,
+                "h": 284
+            },
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 236,
+                "h": 284
+            },
+            "sourceSize": {
+                "w": 236,
+                "h": 284
+            }
+        },
+        {
+            "filename": "lobby_ic_standard_room06.png",
+            "trimmed": false,
+            "frame": {
+                "x": 2,
+                "y": 1204,
+                "w": 236,
+                "h": 284
+            },
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 236,
+                "h": 284
+            },
+            "sourceSize": {
+                "w": 236,
+                "h": 284
+            }
+        },
+        {
+            "filename": "lobby_ic_super_league.png",
+            "trimmed": false,
+            "frame": {
+                "x": 2,
+                "y": 614,
+                "w": 294,
+                "h": 588
+            },
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 294,
+                "h": 588
+            },
+            "sourceSize": {
+                "w": 294,
+                "h": 588
+            }
+        },
+        {
+            "filename": "lobby_ic_superscript.png",
+            "trimmed": false,
+            "frame": {
+                "x": 838,
+                "y": 873,
+                "w": 115,
+                "h": 113
+            },
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 115,
+                "h": 113
+            },
+            "sourceSize": {
+                "w": 115,
+                "h": 113
+            }
+        },
+        {
+            "filename": "lobby_ic_tournament.png",
+            "trimmed": false,
+            "frame": {
+                "x": 2,
+                "y": 2,
+                "w": 316,
+                "h": 610
+            },
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 316,
+                "h": 610
+            },
+            "sourceSize": {
+                "w": 316,
+                "h": 610
+            }
+        },
+        {
+            "filename": "lobby_img_avatar.png",
+            "trimmed": false,
+            "frame": {
+                "x": 955,
+                "y": 873,
+                "w": 98,
+                "h": 98
+            },
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 98,
+                "h": 98
+            },
+            "sourceSize": {
+                "w": 98,
+                "h": 98
+            }
+        },
+        {
+            "filename": "lobby_img_level_bg.png",
+            "trimmed": false,
+            "frame": {
+                "x": 240,
+                "y": 1625,
+                "w": 50,
+                "h": 50
+            },
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 50,
+                "h": 50
+            },
+            "sourceSize": {
+                "w": 50,
+                "h": 50
+            }
+        },
+        {
+            "filename": "lobby_img_lock.png",
+            "trimmed": false,
+            "frame": {
+                "x": 998,
+                "y": 765,
+                "w": 88,
+                "h": 104
+            },
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 88,
+                "h": 104
+            },
+            "sourceSize": {
+                "w": 88,
+                "h": 104
+            }
+        },
+        {
+            "filename": "lobby_img_time_bg.png",
+            "trimmed": false,
+            "frame": {
+                "x": 938,
+                "y": 724,
+                "w": 106,
+                "h": 39
+            },
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 106,
+                "h": 39
+            },
+            "sourceSize": {
+                "w": 106,
+                "h": 39
+            }
+        },
+        {
+            "filename": "lobby_img_value_bg.png",
+            "trimmed": false,
+            "frame": {
+                "x": 235,
+                "y": 1951,
+                "w": 82,
+                "h": 48
+            },
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 82,
+                "h": 48
+            },
+            "sourceSize": {
+                "w": 82,
+                "h": 48
+            }
+        },
+        {
+            "filename": "lobby_leftbar_bg.png",
+            "trimmed": false,
+            "frame": {
+                "x": 616,
+                "y": 574,
+                "w": 320,
+                "h": 172
+            },
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 320,
+                "h": 172
+            },
+            "sourceSize": {
+                "w": 320,
+                "h": 172
+            }
+        },
+        {
+            "filename": "lobby_rightbar_bg.png",
+            "trimmed": false,
+            "frame": {
+                "x": 2,
+                "y": 1776,
+                "w": 321,
+                "h": 173
+            },
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 321,
+                "h": 173
+            },
+            "sourceSize": {
+                "w": 321,
+                "h": 173
+            }
+        },
+        {
+            "filename": "lobby_split_bg.png",
+            "trimmed": false,
+            "frame": {
+                "x": 240,
+                "y": 1204,
+                "w": 60,
+                "h": 419
+            },
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 60,
+                "h": 419
+            },
+            "sourceSize": {
+                "w": 60,
+                "h": 419
+            }
+        }
+    ],
+    "meta": {
+        "app": "http://www.codeandweb.com/texturepacker",
+        "version": "1.0",
+        "image": "lobby.webp",
+        "format": "RGBA8888",
+        "size": {
+            "w": 1092,
+            "h": 2041
+        },
+        "scale": "1"
+    }
+}

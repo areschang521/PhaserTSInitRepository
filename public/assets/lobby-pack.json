@@ -1,0 +1,29 @@
+{
+    "section1": {
+        "files": [
+            {
+                "atlasURL": "assets/lobby/lobby.json",
+                "textureURL": "assets/lobby/lobby.webp",
+                "type": "atlas",
+                "key": "lobby"
+            },
+            {
+                "url": "assets/lobby/lobby_downbar_bg.png",
+                "type": "image",
+                "key": "lobby_downbar_bg"
+            },
+            {
+                "url": "assets/lobby/lobby_upbar_bg.png",
+                "type": "image",
+                "key": "lobby_upbar_bg"
+            }
+        ]
+    },
+    "meta": {
+        "app": "Phaser Editor 2D - Asset Pack Editor",
+        "contentType": "phasereditor2d.pack.core.AssetContentType",
+        "url": "https://phasereditor2d.com",
+        "version": 2,
+        "showAllFilesInBlocks": false
+    }
+}
